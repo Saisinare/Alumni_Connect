@@ -1,19 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
+import { useState } from "react";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function AlumniForumPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedQuestion, setSelectedQuestion] = useState(null)
-  const [newAnswer, setNewAnswer] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [newAnswer, setNewAnswer] = useState("");
 
   const questions = [
     {
       id: 1,
       title: "How to prepare for system design interviews at FAANG companies?",
-      content: "I'm a final year student preparing for interviews at top tech companies. What are the key topics I should focus on for system design rounds?",
+      content:
+        "I'm a final year student preparing for interviews at top tech companies. What are the key topics I should focus on for system design rounds?",
       author: {
         name: "Alex Johnson",
         role: "student",
@@ -29,7 +30,8 @@ export default function AlumniForumPage() {
       answers: [
         {
           id: 1,
-          content: "Great question! For system design interviews, focus on these key areas: 1) Scalability patterns (load balancing, caching, sharding), 2) Database design and optimization, 3) Microservices architecture, 4) Real-time systems, and 5) Security considerations.",
+          content:
+            "Great question! For system design interviews, focus on these key areas: 1) Scalability patterns (load balancing, caching, sharding), 2) Database design and optimization, 3) Microservices architecture, 4) Real-time systems, and 5) Security considerations.",
           author: {
             name: "Sarah Chen",
             role: "alumni",
@@ -46,7 +48,8 @@ export default function AlumniForumPage() {
     {
       id: 2,
       title: "Best state management solution for large React applications?",
-      content: "We're building a complex React app and need to choose between Redux, Context API, and Zustand. What would you recommend for a team of 10+ developers?",
+      content:
+        "We're building a complex React app and need to choose between Redux, Context API, and Zustand. What would you recommend for a team of 10+ developers?",
       author: {
         name: "Priya Patel",
         role: "student",
@@ -62,7 +65,8 @@ export default function AlumniForumPage() {
       answers: [
         {
           id: 3,
-          content: "For large applications, I'd recommend Redux Toolkit with RTK Query. It provides excellent DevTools, predictable state updates, and great TypeScript support.",
+          content:
+            "For large applications, I'd recommend Redux Toolkit with RTK Query. It provides excellent DevTools, predictable state updates, and great TypeScript support.",
           author: {
             name: "Emily Johnson",
             role: "alumni",
@@ -76,31 +80,44 @@ export default function AlumniForumPage() {
         },
       ],
     },
-  ]
+  ];
 
   const handleAnswerSubmit = (questionId) => {
     if (newAnswer.trim()) {
-      console.log("Submitting answer for question:", questionId, "Answer:", newAnswer)
-      setNewAnswer("")
-      setSelectedQuestion(null)
-      alert("Answer submitted successfully!")
+      console.log(
+        "Submitting answer for question:",
+        questionId,
+        "Answer:",
+        newAnswer
+      );
+      setNewAnswer("");
+      setSelectedQuestion(null);
+      alert("Answer submitted successfully!");
     }
-  }
+  };
 
   const renderQuestionCard = (question) => (
-    <div key={question.id} className="bg-white rounded-lg p-6 shadow-sm border hover:shadow-md transition-shadow">
+    <div
+      key={question.id}
+      className="bg-white rounded-lg p-6 shadow-sm border hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className="font-bold text-lg hover:text-blue-600 cursor-pointer mb-2">
             {question.title}
-            {question.isTrending && <span className="ml-2 text-orange-500">🔥</span>}
-            {question.isAnswered && <span className="ml-2 text-green-500">✓</span>}
+            {question.isTrending && (
+              <span className="ml-2 text-orange-500">🔥</span>
+            )}
+            {question.isAnswered && (
+              <span className="ml-2 text-green-500">✓</span>
+            )}
           </h3>
           <p className="text-gray-600 mb-3">{question.content}</p>
-          
+
           <div className="flex flex-wrap gap-2 mb-4">
             {question.tags.map((tag) => (
-              <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+              <span
+                key={tag}
+                className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
                 #{tag}
               </span>
             ))}
@@ -123,20 +140,30 @@ export default function AlumniForumPage() {
       {/* Answers Section */}
       {question.answers.length > 0 && (
         <div className="mt-4 border-t pt-4">
-          <h4 className="font-semibold mb-3">Answers ({question.answers.length})</h4>
+          <h4 className="font-semibold mb-3">
+            Answers ({question.answers.length})
+          </h4>
           {question.answers.map((answer) => (
             <div key={answer.id} className="bg-gray-50 rounded-lg p-4 mb-3">
               <p className="text-sm text-gray-700 mb-3">{answer.content}</p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Avatar className="w-6 h-6">
-                    <AvatarImage src={answer.author.avatar || "/placeholder.svg"} alt={answer.author.name} />
+                    <AvatarImage
+                      src={answer.author.avatar || "/placeholder.svg"}
+                      alt={answer.author.name}
+                    />
                     <AvatarFallback className="text-xs">
-                      {answer.author.name.split(" ").map((n) => n[0]).join("")}
+                      {answer.author.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-semibold text-xs">{answer.author.name}</div>
+                    <div className="font-semibold text-xs">
+                      {answer.author.name}
+                    </div>
                     <div className="text-xs text-gray-500">
                       {answer.author.position} at {answer.author.company}
                     </div>
@@ -148,7 +175,9 @@ export default function AlumniForumPage() {
                       ✓ Accepted
                     </span>
                   )}
-                  <span className="text-xs text-gray-500">{answer.timeAgo}</span>
+                  <span className="text-xs text-gray-500">
+                    {answer.timeAgo}
+                  </span>
                 </div>
               </div>
             </div>
@@ -170,14 +199,12 @@ export default function AlumniForumPage() {
           <div className="flex gap-2">
             <button
               onClick={() => handleAnswerSubmit(question.id)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
               Submit Answer
             </button>
             <button
               onClick={() => setSelectedQuestion(null)}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
               Cancel
             </button>
           </div>
@@ -189,14 +216,13 @@ export default function AlumniForumPage() {
         <div className="mt-4 border-t pt-4">
           <button
             onClick={() => setSelectedQuestion(question.id)}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
             Answer This Question
           </button>
         </div>
       )}
     </div>
-  )
+  );
 
   return (
     <DashboardLayout userRole="alumni" title="Q&A Forum">
@@ -236,9 +262,7 @@ export default function AlumniForumPage() {
         </div>
 
         {/* Questions List */}
-        <div className="space-y-6">
-          {questions.map(renderQuestionCard)}
-        </div>
+        <div className="space-y-6">{questions.map(renderQuestionCard)}</div>
 
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -259,7 +283,9 @@ export default function AlumniForumPage() {
                 <span className="text-green-600 font-bold">✓</span>
               </div>
               <div>
-                <div className="text-2xl font-bold">{questions.filter(q => q.isAnswered).length}</div>
+                <div className="text-2xl font-bold">
+                  {questions.filter((q) => q.isAnswered).length}
+                </div>
                 <div className="text-sm text-gray-600">Answered</div>
               </div>
             </div>
@@ -270,7 +296,9 @@ export default function AlumniForumPage() {
                 <span className="text-orange-600 font-bold">🔥</span>
               </div>
               <div>
-                <div className="text-2xl font-bold">{questions.filter(q => q.isTrending).length}</div>
+                <div className="text-2xl font-bold">
+                  {questions.filter((q) => q.isTrending).length}
+                </div>
                 <div className="text-sm text-gray-600">Trending</div>
               </div>
             </div>
@@ -281,7 +309,9 @@ export default function AlumniForumPage() {
                 <span className="text-purple-600 font-bold">👥</span>
               </div>
               <div>
-                <div className="text-2xl font-bold">{questions.reduce((sum, q) => sum + q.answers.length, 0)}</div>
+                <div className="text-2xl font-bold">
+                  {questions.reduce((sum, q) => sum + q.answers.length, 0)}
+                </div>
                 <div className="text-sm text-gray-600">Total Answers</div>
               </div>
             </div>
@@ -289,5 +319,5 @@ export default function AlumniForumPage() {
         </div>
       </div>
     </DashboardLayout>
-  )
+  );
 }
