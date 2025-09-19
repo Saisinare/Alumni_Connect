@@ -1,16 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Clock, CheckCircle, XCircle, Calendar, MessageSquare, User, Star, Award } from "lucide-react"
+import { useState } from "react";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Clock,
+  CheckCircle,
+  XCircle,
+  Calendar,
+  MessageSquare,
+  User,
+  Star,
+  Award,
+} from "lucide-react";
 
 export default function MentorshipPage() {
-  const [selectedRequest, setSelectedRequest] = useState(null)
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   const pendingRequests = [
     {
@@ -52,7 +61,7 @@ export default function MentorshipPage() {
       gpa: "3.7",
       projects: 6,
     },
-  ]
+  ];
 
   const activeConnections = [
     {
@@ -75,7 +84,7 @@ export default function MentorshipPage() {
       avatar: "/student-james.png",
       progress: 80,
     },
-  ]
+  ];
 
   const completedMentorships = [
     {
@@ -85,7 +94,8 @@ export default function MentorshipPage() {
       duration: "3 months",
       outcome: "Landed job at Stripe",
       rating: 5,
-      feedback: "Sarah was an incredible mentor! Her guidance helped me land my dream job.",
+      feedback:
+        "Sarah was an incredible mentor! Her guidance helped me land my dream job.",
       avatar: "/student-maria.png",
     },
     {
@@ -95,23 +105,24 @@ export default function MentorshipPage() {
       duration: "2 months",
       outcome: "Joined Microsoft",
       rating: 5,
-      feedback: "Excellent mentorship. The mock interviews were extremely helpful.",
+      feedback:
+        "Excellent mentorship. The mock interviews were extremely helpful.",
       avatar: "/student-kevin.png",
     },
-  ]
+  ];
 
   const handleRequestAction = (requestId, action) => {
     // Handle accept/decline logic here
-    console.log(`${action} request ${requestId}`)
+    console.log(`${action} request ${requestId}`);
     // In a real app, this would make an API call
     if (action === "accept") {
       // Move to active mentorships
-      console.log(`Moving request ${requestId} to active mentorships`)
+      console.log(`Moving request ${requestId} to active mentorships`);
     } else if (action === "decline") {
       // Remove from pending requests
-      console.log(`Removing request ${requestId} from pending`)
+      console.log(`Removing request ${requestId} from pending`);
     }
-  }
+  };
 
   return (
     <DashboardLayout userRole="alumni" title="Mentorship">
@@ -125,8 +136,12 @@ export default function MentorshipPage() {
                   <Clock className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <div className="text-2xl font-semibold">{pendingRequests.length}</div>
-                  <div className="text-sm text-muted-foreground">Pending Requests</div>
+                  <div className="text-2xl font-semibold">
+                    {pendingRequests.length}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Pending Requests
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -139,8 +154,12 @@ export default function MentorshipPage() {
                   <User className="w-5 h-5 text-secondary" />
                 </div>
                 <div>
-                  <div className="text-2xl font-semibold">{activeConnections.length}</div>
-                  <div className="text-sm text-muted-foreground">Active Mentorships</div>
+                  <div className="text-2xl font-semibold">
+                    {activeConnections.length}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Active Mentorships
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -153,7 +172,9 @@ export default function MentorshipPage() {
                   <CheckCircle className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <div className="text-2xl font-semibold">{completedMentorships.length}</div>
+                  <div className="text-2xl font-semibold">
+                    {completedMentorships.length}
+                  </div>
                   <div className="text-sm text-muted-foreground">Completed</div>
                 </div>
               </div>
@@ -168,7 +189,9 @@ export default function MentorshipPage() {
                 </div>
                 <div>
                   <div className="text-2xl font-semibold">4.9</div>
-                  <div className="text-sm text-muted-foreground">Average Rating</div>
+                  <div className="text-sm text-muted-foreground">
+                    Average Rating
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -189,7 +212,10 @@ export default function MentorshipPage() {
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={request.avatar || "/placeholder.svg"} alt={request.student} />
+                      <AvatarImage
+                        src={request.avatar || "/placeholder.svg"}
+                        alt={request.student}
+                      />
                       <AvatarFallback>
                         {request.student
                           .split(" ")
@@ -201,8 +227,12 @@ export default function MentorshipPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold text-lg">{request.student}</h3>
-                          <p className="text-sm text-muted-foreground">Class of {request.year}</p>
+                          <h3 className="font-semibold text-lg">
+                            {request.student}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Class of {request.year}
+                          </p>
                         </div>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="w-3 h-3" />
@@ -211,8 +241,12 @@ export default function MentorshipPage() {
                       </div>
 
                       <div className="mb-3">
-                        <h4 className="font-medium text-primary mb-1">{request.topic}</h4>
-                        <p className="text-sm text-muted-foreground text-pretty">{request.message}</p>
+                        <h4 className="font-medium text-primary mb-1">
+                          {request.topic}
+                        </h4>
+                        <p className="text-sm text-muted-foreground text-pretty">
+                          {request.message}
+                        </p>
                       </div>
 
                       <div className="flex items-center gap-6 mb-4 text-sm">
@@ -228,22 +262,30 @@ export default function MentorshipPage() {
 
                       <div className="flex flex-wrap gap-1 mb-4">
                         {request.skills.map((skill) => (
-                          <Badge key={skill} variant="secondary" className="text-xs">
+                          <Badge
+                            key={skill}
+                            variant="secondary"
+                            className="text-xs">
                             {skill}
                           </Badge>
                         ))}
                       </div>
 
                       <div className="flex gap-3">
-                        <Button onClick={() => handleRequestAction(request.id, "accept")} className="flex-1">
+                        <Button
+                          onClick={() =>
+                            handleRequestAction(request.id, "accept")
+                          }
+                          className="flex-1">
                           <CheckCircle className="w-4 h-4 mr-1" />
                           Accept Request
                         </Button>
                         <Button
-                          onClick={() => handleRequestAction(request.id, "decline")}
+                          onClick={() =>
+                            handleRequestAction(request.id, "decline")
+                          }
                           variant="outline"
-                          className="flex-1 bg-transparent"
-                        >
+                          className="flex-1 bg-transparent">
                           <XCircle className="w-4 h-4 mr-1" />
                           Decline
                         </Button>
@@ -264,7 +306,10 @@ export default function MentorshipPage() {
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={connection.avatar || "/placeholder.svg"} alt={connection.student} />
+                      <AvatarImage
+                        src={connection.avatar || "/placeholder.svg"}
+                        alt={connection.student}
+                      />
                       <AvatarFallback>
                         {connection.student
                           .split(" ")
@@ -276,8 +321,12 @@ export default function MentorshipPage() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold text-lg">{connection.student}</h3>
-                          <p className="text-sm text-primary font-medium">{connection.topic}</p>
+                          <h3 className="font-semibold text-lg">
+                            {connection.student}
+                          </h3>
+                          <p className="text-sm text-primary font-medium">
+                            {connection.topic}
+                          </p>
                         </div>
                         <Badge variant="secondary">Active</Badge>
                       </div>
@@ -285,19 +334,29 @@ export default function MentorshipPage() {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                         <div>
                           <div className="text-muted-foreground">Started</div>
-                          <div className="font-medium">{connection.startDate}</div>
+                          <div className="font-medium">
+                            {connection.startDate}
+                          </div>
                         </div>
                         <div>
                           <div className="text-muted-foreground">Sessions</div>
-                          <div className="font-medium">{connection.sessionsCompleted}</div>
+                          <div className="font-medium">
+                            {connection.sessionsCompleted}
+                          </div>
                         </div>
                         <div>
-                          <div className="text-muted-foreground">Next Session</div>
-                          <div className="font-medium">{connection.nextSession}</div>
+                          <div className="text-muted-foreground">
+                            Next Session
+                          </div>
+                          <div className="font-medium">
+                            {connection.nextSession}
+                          </div>
                         </div>
                         <div>
                           <div className="text-muted-foreground">Progress</div>
-                          <div className="font-medium">{connection.progress}%</div>
+                          <div className="font-medium">
+                            {connection.progress}%
+                          </div>
                         </div>
                       </div>
 
@@ -306,7 +365,10 @@ export default function MentorshipPage() {
                           <Calendar className="w-4 h-4 mr-1" />
                           Schedule Session
                         </Button>
-                        <Button size="sm" variant="outline" className="bg-transparent">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="bg-transparent">
                           <MessageSquare className="w-4 h-4 mr-1" />
                           Message
                         </Button>
@@ -327,7 +389,10 @@ export default function MentorshipPage() {
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={mentorship.avatar || "/placeholder.svg"} alt={mentorship.student} />
+                      <AvatarImage
+                        src={mentorship.avatar || "/placeholder.svg"}
+                        alt={mentorship.student}
+                      />
                       <AvatarFallback>
                         {mentorship.student
                           .split(" ")
@@ -339,12 +404,19 @@ export default function MentorshipPage() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold text-lg">{mentorship.student}</h3>
-                          <p className="text-sm text-primary font-medium">{mentorship.topic}</p>
+                          <h3 className="font-semibold text-lg">
+                            {mentorship.student}
+                          </h3>
+                          <p className="text-sm text-primary font-medium">
+                            {mentorship.topic}
+                          </p>
                         </div>
                         <div className="flex items-center gap-1">
                           {[...Array(mentorship.rating)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <Star
+                              key={i}
+                              className="w-4 h-4 fill-yellow-400 text-yellow-400"
+                            />
                           ))}
                         </div>
                       </div>
@@ -352,19 +424,28 @@ export default function MentorshipPage() {
                       <div className="grid grid-cols-2 gap-4 mb-3 text-sm">
                         <div>
                           <div className="text-muted-foreground">Duration</div>
-                          <div className="font-medium">{mentorship.duration}</div>
+                          <div className="font-medium">
+                            {mentorship.duration}
+                          </div>
                         </div>
                         <div>
                           <div className="text-muted-foreground">Outcome</div>
-                          <div className="font-medium text-green-600">{mentorship.outcome}</div>
+                          <div className="font-medium text-green-600">
+                            {mentorship.outcome}
+                          </div>
                         </div>
                       </div>
 
                       <div className="bg-muted/50 p-3 rounded-lg mb-3">
-                        <p className="text-sm text-pretty">"{mentorship.feedback}"</p>
+                        <p className="text-sm text-pretty">
+                          "{mentorship.feedback}"
+                        </p>
                       </div>
 
-                      <Button size="sm" variant="outline" className="bg-transparent">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="bg-transparent">
                         View Full Details
                       </Button>
                     </div>
@@ -376,5 +457,5 @@ export default function MentorshipPage() {
         </Tabs>
       </div>
     </DashboardLayout>
-  )
+  );
 }
