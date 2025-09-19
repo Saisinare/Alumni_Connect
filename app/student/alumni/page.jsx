@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { DynamicAvatar } from "@/components/ui/dynamic-avatar";
 import {
   Select,
   SelectContent,
@@ -46,6 +45,7 @@ export default function FindAlumniPage() {
       skills: ["React", "Python", "Machine Learning", "System Design"],
       experience: "4 years",
       compatibility: 92,
+      avatar: "/images/default-avatar.png",
       bio: "Passionate about building scalable web applications and mentoring junior developers.",
     },
     {
@@ -70,7 +70,7 @@ export default function FindAlumniPage() {
       skills: ["UI/UX", "Figma", "User Research", "Prototyping"],
       experience: "3 years",
       compatibility: 85,
-      avatar: "/professional-woman-designer.png",
+      avatar: "/images/default-avatar.png",
       bio: "Creating intuitive user experiences for e-commerce platforms.",
     },
     {
@@ -83,7 +83,7 @@ export default function FindAlumniPage() {
       skills: ["Python", "SQL", "Machine Learning", "Statistics"],
       experience: "6 years",
       compatibility: 90,
-      avatar: "/professional-data-scientist.png",
+      avatar: "/images/default-avatar.png",
       bio: "Leveraging data to drive product decisions and improve user engagement.",
     },
     {
@@ -96,7 +96,7 @@ export default function FindAlumniPage() {
       skills: ["Swift", "iOS", "Mobile Development", "UI/UX"],
       experience: "2 years",
       compatibility: 87,
-      avatar: "/professional-woman-developer.png",
+      avatar: "/images/default-avatar.png",
       bio: "Building innovative mobile experiences for millions of users worldwide.",
     },
     {
@@ -109,7 +109,7 @@ export default function FindAlumniPage() {
       skills: ["C++", "Python", "Embedded Systems", "Automotive"],
       experience: "4 years",
       compatibility: 83,
-      avatar: "/professional-engineer.png",
+      avatar: "/images/default-avatar.png",
       bio: "Developing autonomous driving software and vehicle control systems.",
     },
   ];

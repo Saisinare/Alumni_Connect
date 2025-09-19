@@ -6,8 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { DynamicAvatar } from "@/components/ui/dynamic-avatar"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar" 
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -43,6 +42,7 @@ export default function ForumPage() {
         name: "Alex Kumar",
         role: "student",
         year: "2025",
+        avatar: "/images/default-avatar.png",
       },
       tags: ["system-design", "interviews", "faang"],
       votes: 15,
@@ -61,6 +61,7 @@ export default function ForumPage() {
         name: "Emma Wilson",
         role: "student",
         year: "2024",
+        avatar: "/images/default-avatar.png",
       },
       tags: ["career", "transition", "industry"],
       votes: 23,
@@ -79,6 +80,7 @@ export default function ForumPage() {
         name: "Mike Chen",
         role: "student",
         year: "2024",
+        avatar: "/images/default-avatar.png",
       },
       tags: ["education", "career", "masters"],
       votes: 8,
@@ -97,6 +99,7 @@ export default function ForumPage() {
         name: "Lisa Park",
         role: "student",
         year: "2024",
+        avatar: "/images/default-avatar.png",
       },
       tags: ["salary", "negotiation", "first-job"],
       votes: 31,
@@ -323,11 +326,18 @@ export default function ForumPage() {
 
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <DynamicAvatar
-                                name={question.author.name}
-                                size="small"
-                                className="w-8 h-8 ring-2 ring-blue-100"
-                              />
+                              <Avatar className="w-8 h-8 ring-2 ring-blue-100">
+                                <AvatarImage
+                                  src={question.author.avatar || "/placeholder.svg"}
+                                  alt={question.author.name}
+                                />
+                                <AvatarFallback className="text-sm">
+                                  {question.author.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
                               <div>
                                 <div className="font-semibold text-sm">{question.author.name}</div>
                                 <div className="text-xs text-muted-foreground">

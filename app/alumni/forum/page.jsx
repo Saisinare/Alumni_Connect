@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
-import { DynamicAvatar } from "@/components/ui/dynamic-avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function AlumniForumPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -18,6 +18,7 @@ export default function AlumniForumPage() {
         name: "Alex Johnson",
         role: "student",
         year: "2024",
+        avatar: "/images/default-avatar.png",
       },
       tags: ["system-design", "interviews", "career"],
       votes: 24,
@@ -34,6 +35,7 @@ export default function AlumniForumPage() {
             role: "alumni",
             company: "Google",
             position: "Senior Software Engineer",
+            avatar: "/images/default-avatar.png",
           },
           timeAgo: "1 day ago",
           votes: 12,
@@ -49,6 +51,7 @@ export default function AlumniForumPage() {
         name: "Priya Patel",
         role: "student",
         year: "2024",
+        avatar: "/images/default-avatar.png",
       },
       tags: ["react", "state-management", "frontend"],
       votes: 18,
@@ -65,6 +68,7 @@ export default function AlumniForumPage() {
             role: "alumni",
             company: "Apple",
             position: "iOS Developer",
+            avatar: "/images/default-avatar.png",
           },
           timeAgo: "2 days ago",
           votes: 8,
@@ -125,11 +129,12 @@ export default function AlumniForumPage() {
               <p className="text-sm text-gray-700 mb-3">{answer.content}</p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <DynamicAvatar 
-                    name={answer.author.name} 
-                    size="small"
-                    className="w-6 h-6"
-                  />
+                  <Avatar className="w-6 h-6">
+                    <AvatarImage src={answer.author.avatar || "/placeholder.svg"} alt={answer.author.name} />
+                    <AvatarFallback className="text-xs">
+                      {answer.author.name.split(" ").map((n) => n[0]).join("")}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <div className="font-semibold text-xs">{answer.author.name}</div>
                     <div className="text-xs text-gray-500">

@@ -1,14 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { DynamicAvatar } from "@/components/ui/dynamic-avatar"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState } from "react";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
   Filter,
@@ -33,14 +39,14 @@ import {
   Download,
   Upload,
   RefreshCw,
-} from "lucide-react"
+} from "lucide-react";
 
 export default function AdminDirectoryPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [filterCompany, setFilterCompany] = useState("all")
-  const [filterBatch, setFilterBatch] = useState("all")
-  const [filterSkills, setFilterSkills] = useState("all")
-  const [sortBy, setSortBy] = useState("name")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCompany, setFilterCompany] = useState("all");
+  const [filterBatch, setFilterBatch] = useState("all");
+  const [filterSkills, setFilterSkills] = useState("all");
+  const [sortBy, setSortBy] = useState("name");
 
   const alumni = [
     {
@@ -62,6 +68,7 @@ export default function AdminDirectoryPage() {
       lastActive: "2 days ago",
       achievements: ["Google Cloud Certified", "Open Source Contributor"],
       bio: "Passionate about building scalable web applications and mentoring new developers.",
+      avatar: "/images/default-avatar.png",
     },
     {
       id: 2,
@@ -82,6 +89,7 @@ export default function AdminDirectoryPage() {
       lastActive: "1 week ago",
       achievements: ["Microsoft MVP", "Product Innovation Award"],
       bio: "Experienced product leader with a track record of launching successful products.",
+      avatar: "/images/default-avatar.png",
     },
     {
       id: 3,
@@ -102,6 +110,7 @@ export default function AdminDirectoryPage() {
       lastActive: "3 days ago",
       achievements: ["Apple Design Award", "iOS Expert"],
       bio: "iOS developer passionate about creating beautiful and intuitive mobile experiences.",
+      avatar: "/images/default-avatar.png",
     },
     {
       id: 4,
@@ -122,6 +131,7 @@ export default function AdminDirectoryPage() {
       lastActive: "1 day ago",
       achievements: ["ML Research Paper", "Data Science Excellence"],
       bio: "Data scientist focused on recommendation systems and machine learning algorithms.",
+      avatar: "/images/default-avatar.png",
     },
     {
       id: 5,
@@ -142,6 +152,7 @@ export default function AdminDirectoryPage() {
       lastActive: "4 days ago",
       achievements: ["Tesla Innovation Award", "Open Source Contributor"],
       bio: "Software engineer working on autonomous vehicle systems and embedded software.",
+      avatar: "/images/default-avatar.png",
     },
     {
       id: 6,
@@ -162,45 +173,70 @@ export default function AdminDirectoryPage() {
       lastActive: "1 week ago",
       achievements: ["AWS Certified", "Cloud Architecture Expert"],
       bio: "Cloud solutions architect helping companies scale their infrastructure on AWS.",
+      avatar: "/images/default-avatar.png",
     },
-  ]
+  ];
 
-  const companies = ["all", "Google", "Microsoft", "Apple", "Netflix", "Tesla", "Amazon"]
-  const batches = ["all", "2017", "2018", "2019", "2020", "2021", "2022"]
-  const allSkills = ["all", "React", "Node.js", "Python", "Machine Learning", "Product Management", "Swift", "iOS Development", "C++", "AWS", "Cloud Architecture"]
+  const companies = [
+    "all",
+    "Google",
+    "Microsoft",
+    "Apple",
+    "Netflix",
+    "Tesla",
+    "Amazon",
+  ];
+  const batches = ["all", "2017", "2018", "2019", "2020", "2021", "2022"];
+  const allSkills = [
+    "all",
+    "React",
+    "Node.js",
+    "Python",
+    "Machine Learning",
+    "Product Management",
+    "Swift",
+    "iOS Development",
+    "C++",
+    "AWS",
+    "Cloud Architecture",
+  ];
 
   const handleSearch = (query) => {
-    setSearchQuery(query)
-  }
+    setSearchQuery(query);
+  };
 
   const filteredAlumni = alumni.filter((alumnus) => {
     const matchesSearch =
       alumnus.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       alumnus.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       alumnus.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      alumnus.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
-    
-    const matchesCompany = filterCompany === "all" || alumnus.company === filterCompany
-    const matchesBatch = filterBatch === "all" || alumnus.batch === filterBatch
-    const matchesSkills = filterSkills === "all" || alumnus.skills.includes(filterSkills)
-    
-    return matchesSearch && matchesCompany && matchesBatch && matchesSkills
-  })
+      alumnus.skills.some((skill) =>
+        skill.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+    const matchesCompany =
+      filterCompany === "all" || alumnus.company === filterCompany;
+    const matchesBatch = filterBatch === "all" || alumnus.batch === filterBatch;
+    const matchesSkills =
+      filterSkills === "all" || alumnus.skills.includes(filterSkills);
+
+    return matchesSearch && matchesCompany && matchesBatch && matchesSkills;
+  });
 
   const sortedAlumni = [...filteredAlumni].sort((a, b) => {
     switch (sortBy) {
       case "name":
-        return a.name.localeCompare(b.name)
+        return a.name.localeCompare(b.name);
       case "company":
-        return a.company.localeCompare(b.company)
+        return a.company.localeCompare(b.company);
       case "batch":
-        return b.batch.localeCompare(a.batch)
+        return b.batch.localeCompare(a.batch);
       case "lastActive":
-        return a.lastActive.localeCompare(b.lastActive)
+        return a.lastActive.localeCompare(b.lastActive);
       default:
-        return a.name.localeCompare(b.name)
+        return a.name.localeCompare(b.name);
     }
-  })
+  });
 
   return (
     <DashboardLayout userRole="admin" title="Alumni Directory">
@@ -292,21 +328,34 @@ export default function AdminDirectoryPage() {
         {/* Alumni Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedAlumni.map((alumnus) => (
-            <Card key={alumnus.id} className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30 hover:from-purple-50/50 hover:to-indigo-50/30">
+            <Card
+              key={alumnus.id}
+              className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30 hover:from-purple-50/50 hover:to-indigo-50/30">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <DynamicAvatar 
-                      name={alumnus.name} 
-                      size="medium"
-                      className="w-12 h-12 ring-2 ring-purple-100"
-                    />
+                    <Avatar className="w-12 h-12 ring-2 ring-purple-100">
+                      <AvatarImage
+                        src={alumnus.avatar || "/placeholder.svg"}
+                        alt={alumnus.name}
+                      />
+                      <AvatarFallback className="text-lg">
+                        {alumnus.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
                     <div>
                       <h3 className="font-bold text-lg">{alumnus.name}</h3>
-                      <p className="text-sm text-muted-foreground">{alumnus.position}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {alumnus.position}
+                      </p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="bg-green-100 text-green-700 border-green-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-100 text-green-700 border-green-200">
                     <Award className="w-3 h-3 mr-1" />
                     {alumnus.status}
                   </Badge>
@@ -330,12 +379,17 @@ export default function AdminDirectoryPage() {
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-1">
                     {alumnus.skills.slice(0, 3).map((skill) => (
-                      <Badge key={skill} variant="secondary" className="text-xs bg-purple-100 text-purple-700 hover:bg-purple-200">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="text-xs bg-purple-100 text-purple-700 hover:bg-purple-200">
                         {skill}
                       </Badge>
                     ))}
                     {alumnus.skills.length > 3 && (
-                      <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-gray-100 text-gray-600">
                         +{alumnus.skills.length - 3} more
                       </Badge>
                     )}
@@ -355,17 +409,26 @@ export default function AdminDirectoryPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     {alumnus.linkedin && (
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-blue-50">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 hover:bg-blue-50">
                         <Linkedin className="w-4 h-4 text-blue-600" />
                       </Button>
                     )}
                     {alumnus.github && (
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-50">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 hover:bg-gray-50">
                         <Github className="w-4 h-4 text-gray-600" />
                       </Button>
                     )}
                     {alumnus.twitter && (
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-blue-50">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 hover:bg-blue-50">
                         <Twitter className="w-4 h-4 text-blue-400" />
                       </Button>
                     )}
@@ -400,7 +463,9 @@ export default function AdminDirectoryPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold">{alumni.length}</div>
-                <div className="text-sm text-muted-foreground">Total Alumni</div>
+                <div className="text-sm text-muted-foreground">
+                  Total Alumni
+                </div>
               </div>
             </div>
           </Card>
@@ -410,7 +475,9 @@ export default function AdminDirectoryPage() {
                 <Award className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{alumni.filter(a => a.status === 'verified').length}</div>
+                <div className="text-2xl font-bold">
+                  {alumni.filter((a) => a.status === "verified").length}
+                </div>
                 <div className="text-sm text-muted-foreground">Verified</div>
               </div>
             </div>
@@ -421,7 +488,9 @@ export default function AdminDirectoryPage() {
                 <Building2 className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{new Set(alumni.map(a => a.company)).size}</div>
+                <div className="text-2xl font-bold">
+                  {new Set(alumni.map((a) => a.company)).size}
+                </div>
                 <div className="text-sm text-muted-foreground">Companies</div>
               </div>
             </div>
@@ -432,7 +501,9 @@ export default function AdminDirectoryPage() {
                 <GraduationCap className="w-5 h-5 text-orange-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{new Set(alumni.map(a => a.batch)).size}</div>
+                <div className="text-2xl font-bold">
+                  {new Set(alumni.map((a) => a.batch)).size}
+                </div>
                 <div className="text-sm text-muted-foreground">Batches</div>
               </div>
             </div>
@@ -440,5 +511,5 @@ export default function AdminDirectoryPage() {
         </div>
       </div>
     </DashboardLayout>
-  )
+  );
 }
