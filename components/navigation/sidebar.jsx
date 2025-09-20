@@ -22,12 +22,14 @@ import {
   Search,
   Bell,
   Bot,
+  MessageCircle,
 } from "lucide-react"
 
 const navigationItems = {
   student: [
     { name: "Dashboard", href: "/student", icon: Home },
     { name: "Find Alumni", href: "/student/alumni", icon: Search },
+    { name: "Messaging", href: "/student/messaging", icon: MessageCircle },
     { name: "Q&A Forum", href: "/student/forum", icon: MessageSquare },
     { name: "Mentorship", href: "/student/mentorship", icon: Users },
     { name: "Events", href: "/student/events", icon: Calendar },
@@ -36,6 +38,7 @@ const navigationItems = {
   ],
   alumni: [
     { name: "Dashboard", href: "/alumni", icon: Home },
+    { name: "Messaging", href: "/alumni/messaging", icon: MessageCircle },
     { name: "Mentorship Requests", href: "/alumni/mentorship", icon: Users },
     { name: "Q&A Forum", href: "/alumni/forum", icon: MessageSquare },
     { name: "Share Experience", href: "/alumni/experience", icon: Award },
