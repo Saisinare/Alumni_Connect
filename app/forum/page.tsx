@@ -313,7 +313,11 @@ export default function ForumPage() {
                             </h3>
                           </div>
 
-                          <p className="text-base text-muted-foreground mb-4 line-clamp-3 leading-relaxed">{question.content}</p>
+                          <p className="text-base text-muted-foreground mb-4 leading-relaxed overflow-hidden" style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical'
+                          }}>{question.content}</p>
 
                           <div className="flex flex-wrap gap-2 mb-4">
                             {question.tags.map((tag) => (
@@ -390,7 +394,11 @@ export default function ForumPage() {
                               {question.title}
                             </h3>
 
-                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{question.content}</p>
+                            <p className="text-sm text-muted-foreground mb-3 overflow-hidden" style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical'
+                            }}>{question.content}</p>
 
                             <div className="flex flex-wrap gap-2 mb-3">
                               {question.tags.map((tag) => (
@@ -471,7 +479,11 @@ export default function ForumPage() {
                               {question.isAnswered && <CheckCircle className="inline w-4 h-4 ml-2 text-green-500" />}
                             </h3>
 
-                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{question.content}</p>
+                            <p className="text-sm text-muted-foreground mb-3 overflow-hidden" style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical'
+                            }}>{question.content}</p>
 
                             <div className="flex flex-wrap gap-2 mb-3">
                               {question.tags.map((tag) => (
