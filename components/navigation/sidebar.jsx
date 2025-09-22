@@ -23,6 +23,7 @@ import {
   Bell,
   Bot,
   MessageCircle,
+  FileText,
 } from "lucide-react"
 
 const navigationItems = {
@@ -33,6 +34,7 @@ const navigationItems = {
     { name: "Q&A Forum", href: "/student/forum", icon: MessageSquare },
     { name: "Mentorship", href: "/student/mentorship", icon: Users },
     { name: "Events", href: "/student/events", icon: Calendar },
+    { name: "Summarizer", href: "/student/summarizer", icon: FileText },
     { name: "AI Assistant", href: "/student/chatbot", icon: Bot },
     { name: "Profile", href: "/student/profile", icon: Settings },
   ],

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -38,6 +38,9 @@ import {
   Lightbulb,
   Target,
   Zap,
+  ArrowRight,
+  AlertTriangle,
+  X,
 } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 
@@ -54,6 +57,12 @@ export default function StudentForumPage() {
     category: "",
     isAnonymous: false
   })
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false)
+  const [duplicateQuestion, setDuplicateQuestion] = useState(null)
+  const titleInputRef = useRef(null)
+  const suggestionsRef = useRef(null)
 
   const questions = [
     {
@@ -157,6 +166,106 @@ export default function StudentForumPage() {
       isAnswered: true,
       isTrending: false,
     },
+    {
+      id: 6,
+      title: "How to prepare for TCS aptitude test?",
+      content: "I have an upcoming TCS aptitude test. What topics should I focus on and what's the difficulty level?",
+      author: {
+        name: "Priya Sharma",
+        avatar: "/student-priya.png",
+        role: "student",
+        year: "2025",
+      },
+      tags: ["tcs", "aptitude", "preparation"],
+      category: "Career",
+      votes: 12,
+      answers: 7,
+      views: 89,
+      createdAt: new Date("2024-01-05"),
+      timeAgo: "1 week ago",
+      isAnswered: true,
+      isTrending: false,
+    },
+    {
+      id: 7,
+      title: "What topics are asked in TCS aptitude?",
+      content: "Can someone share the syllabus and important topics for TCS aptitude round?",
+      author: {
+        name: "Rahul Verma",
+        avatar: "/student-rahul.png",
+        role: "student",
+        year: "2024",
+      },
+      tags: ["tcs", "aptitude", "syllabus"],
+      category: "Career",
+      votes: 8,
+      answers: 5,
+      views: 67,
+      createdAt: new Date("2024-01-04"),
+      timeAgo: "1 week ago",
+      isAnswered: true,
+      isTrending: false,
+    },
+    {
+      id: 8,
+      title: "Is TCS aptitude difficult?",
+      content: "How difficult is the TCS aptitude test compared to other companies?",
+      author: {
+        name: "Anita Patel",
+        avatar: "/student-anita.png",
+        role: "student",
+        year: "2025",
+      },
+      tags: ["tcs", "aptitude", "difficulty"],
+      category: "Career",
+      votes: 6,
+      answers: 3,
+      views: 45,
+      createdAt: new Date("2024-01-03"),
+      timeAgo: "1 week ago",
+      isAnswered: false,
+      isTrending: false,
+    },
+    {
+      id: 9,
+      title: "System design interview preparation tips",
+      content: "Looking for comprehensive tips to prepare for system design interviews.",
+      author: {
+        name: "Vikram Singh",
+        avatar: "/student-vikram.png",
+        role: "student",
+        year: "2024",
+      },
+      tags: ["system-design", "interviews", "preparation"],
+      category: "Career",
+      votes: 19,
+      answers: 11,
+      views: 142,
+      createdAt: new Date("2024-01-02"),
+      timeAgo: "2 weeks ago",
+      isAnswered: true,
+      isTrending: false,
+    },
+    {
+      id: 10,
+      title: "React best practices for beginners",
+      content: "What are the essential React best practices every beginner should know?",
+      author: {
+        name: "Neha Gupta",
+        avatar: "/student-neha.png",
+        role: "student",
+        year: "2025",
+      },
+      tags: ["react", "best-practices", "beginners"],
+      category: "Technical",
+      votes: 14,
+      answers: 8,
+      views: 98,
+      createdAt: new Date("2024-01-01"),
+      timeAgo: "2 weeks ago",
+      isAnswered: true,
+      isTrending: false,
+    },
   ]
 
   const handleUpvote = (questionId) => {
@@ -185,14 +294,127 @@ export default function StudentForumPage() {
     })
   }
 
+  // Debounced search function
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (newQuestion.title.trim().length > 2) {
+        searchSimilarQuestions(newQuestion.title)
+      } else {
+        setSuggestions([])
+        setShowSuggestions(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }, [newQuestion.title])
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target) &&
+          titleInputRef.current && !titleInputRef.current.contains(event.target)) {
+        setShowSuggestions(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const searchSimilarQuestions = (query) => {
+    const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 2)
+    
+    const similarQuestions = questions
+      .map(question => {
+        let score = 0
+        const titleLower = question.title.toLowerCase()
+        const contentLower = question.content.toLowerCase()
+        
+        // Exact phrase match gets highest score
+        if (titleLower.includes(query.toLowerCase())) {
+          score += 10
+        }
+        
+        // Individual word matches
+        searchTerms.forEach(term => {
+          if (titleLower.includes(term)) score += 3
+          if (contentLower.includes(term)) score += 1
+          if (question.tags.some(tag => tag.includes(term))) score += 2
+        })
+        
+        return { ...question, similarity: score }
+      })
+      .filter(question => question.similarity > 0)
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 5)
+    
+    setSuggestions(similarQuestions)
+    setShowSuggestions(similarQuestions.length > 0)
+  }
+
+  const checkForDuplicates = (title) => {
+    const titleLower = title.toLowerCase()
+    const duplicate = questions.find(q => {
+      const similarity = calculateSimilarity(titleLower, q.title.toLowerCase())
+      return similarity > 0.7 // 70% similarity threshold
+    })
+    
+    return duplicate
+  }
+
+  const calculateSimilarity = (str1, str2) => {
+    const words1 = str1.split(' ').filter(w => w.length > 2)
+    const words2 = str2.split(' ').filter(w => w.length > 2)
+    
+    if (words1.length === 0 || words2.length === 0) return 0
+    
+    let matches = 0
+    words1.forEach(word1 => {
+      if (words2.some(word2 => word2.includes(word1) || word1.includes(word2))) {
+        matches++
+      }
+    })
+    
+    return matches / Math.max(words1.length, words2.length)
+  }
+
+  const handleNavigateToQuestion = (questionId) => {
+    // In a real app, this would navigate to the question detail page
+    console.log(`Navigate to question ${questionId}`)
+    setShowSuggestions(false)
+    setShowAskForm(false)
+    // For demo purposes, we'll just highlight the question in the list
+    const questionElement = document.getElementById(`question-${questionId}`)
+    if (questionElement) {
+      questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      questionElement.classList.add('ring-2', 'ring-green-500', 'ring-opacity-50')
+      setTimeout(() => {
+        questionElement.classList.remove('ring-2', 'ring-green-500', 'ring-opacity-50')
+      }, 3000)
+    }
+  }
+
   const handleSubmitQuestion = () => {
     if (!newQuestion.title.trim() || !newQuestion.content.trim() || !newQuestion.category) {
       alert("Please fill in all required fields")
       return
     }
     
+    // Check for duplicates before submitting
+    const duplicate = checkForDuplicates(newQuestion.title)
+    if (duplicate) {
+      setDuplicateQuestion(duplicate)
+      setShowDuplicateWarning(true)
+      return
+    }
+    
+    submitQuestion()
+  }
+
+  const submitQuestion = () => {
     console.log("New question:", newQuestion)
     setShowAskForm(false)
+    setShowDuplicateWarning(false)
     setNewQuestion({
       title: "",
       content: "",
@@ -200,6 +422,8 @@ export default function StudentForumPage() {
       category: "",
       isAnonymous: false
     })
+    setSuggestions([])
+    setShowSuggestions(false)
     alert("Question submitted successfully!")
   }
 
@@ -258,15 +482,79 @@ export default function StudentForumPage() {
                 <DialogTitle className="text-2xl font-bold">Ask a Question</DialogTitle>
               </DialogHeader>
               <div className="space-y-6">
-                <div>
+                <div className="relative">
                   <Label htmlFor="title">Question Title *</Label>
-                  <Input
-                    id="title"
-                    placeholder="What's your question?"
-                    value={newQuestion.title}
-                    onChange={(e) => setNewQuestion({...newQuestion, title: e.target.value})}
-                    className="mt-1"
-                  />
+                  <div className="relative">
+                    <Input
+                      ref={titleInputRef}
+                      id="title"
+                      placeholder="What's your question?"
+                      value={newQuestion.title}
+                      onChange={(e) => setNewQuestion({...newQuestion, title: e.target.value})}
+                      onFocus={() => {
+                        if (suggestions.length > 0) {
+                          setShowSuggestions(true)
+                        }
+                      }}
+                      className="mt-1"
+                    />
+                    
+                    {/* Autocomplete Suggestions Dropdown */}
+                    {showSuggestions && suggestions.length > 0 && (
+                      <div 
+                        ref={suggestionsRef}
+                        className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto"
+                      >
+                        <div className="p-2 text-xs text-gray-500 border-b bg-gray-50 font-medium">
+                          Similar questions found - click to view existing answers
+                        </div>
+                        {suggestions.map((suggestion) => (
+                          <div
+                            key={suggestion.id}
+                            className="p-3 hover:bg-green-50 border-b border-gray-100 last:border-b-0 cursor-pointer transition-colors"
+                            onClick={() => handleNavigateToQuestion(suggestion.id)}
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm text-gray-900 line-clamp-2 mb-1">
+                                  {suggestion.title}
+                                </div>
+                                <div className="text-xs text-gray-500 line-clamp-1 mb-2">
+                                  {suggestion.content.substring(0, 100)}...
+                                </div>
+                                <div className="flex items-center gap-3 text-xs text-gray-400">
+                                  <span className="flex items-center gap-1">
+                                    <MessageCircle className="w-3 h-3" />
+                                    {suggestion.answers} answers
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <Eye className="w-3 h-3" />
+                                    {suggestion.views} views
+                                  </span>
+                                  {suggestion.isAnswered && (
+                                    <Badge className="bg-green-100 text-green-700 text-xs px-1 py-0">
+                                      Answered
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="flex-shrink-0 h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-100"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleNavigateToQuestion(suggestion.id)
+                                }}
+                              >
+                                <ArrowRight className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -347,6 +635,73 @@ export default function StudentForumPage() {
           </Dialog>
         </div>
 
+        {/* Duplicate Warning Dialog */}
+        <Dialog open={showDuplicateWarning} onOpenChange={setShowDuplicateWarning}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-orange-600">
+                <AlertTriangle className="w-5 h-5" />
+                Similar Question Found
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-gray-600">
+                This question seems similar to an existing question. Do you still want to post your question?
+              </p>
+              
+              {duplicateQuestion && (
+                <div className="bg-gray-50 rounded-lg p-3 border">
+                  <div className="font-medium text-sm text-gray-900 mb-1">
+                    {duplicateQuestion.title}
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <span className="flex items-center gap-1">
+                      <MessageCircle className="w-3 h-3" />
+                      {duplicateQuestion.answers} answers
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Eye className="w-3 h-3" />
+                      {duplicateQuestion.views} views
+                    </span>
+                    {duplicateQuestion.isAnswered && (
+                      <Badge className="bg-green-100 text-green-700 text-xs px-1 py-0">
+                        Answered
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex justify-end space-x-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    if (duplicateQuestion) {
+                      handleNavigateToQuestion(duplicateQuestion.id)
+                    }
+                  }}
+                  className="text-green-600 border-green-200 hover:bg-green-50"
+                >
+                  <ArrowRight className="w-4 h-4 mr-2" />
+                  View Existing Question
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowDuplicateWarning(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={submitQuestion}
+                  className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white"
+                >
+                  Post Anyway
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
         {/* Search and Filter */}
         <Card className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -392,7 +747,7 @@ export default function StudentForumPage() {
         {/* Questions List */}
         <div className="space-y-6">
           {sortedQuestions.map((question) => (
-            <Card key={question.id} className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-green-50/30 hover:from-green-50/50 hover:to-teal-50/30">
+            <Card key={question.id} id={`question-${question.id}`} className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-green-50/30 hover:from-green-50/50 hover:to-teal-50/30">
               <CardContent className="p-6">
                 <div className="flex gap-6">
                   {/* Vote Section */}
