@@ -22,7 +22,7 @@ import {
   Users,
   CheckCircle,
   Star,
-  ChatBubble,
+  MessageCircle,
 } from "lucide-react"
 
 export default function ForumPage() {
@@ -109,6 +109,25 @@ export default function ForumPage() {
       isAnswered: true,
       isTrending: true,
     },
+    {
+      id: 5,
+      title: "Tips for scaling engineering teams at startups?",
+      content:
+        "I'm leading a small engineering team at a growing startup. What are the best practices for scaling the team and maintaining code quality?",
+      author: {
+        name: "John Smith",
+        role: "alumni",
+        company: "Netflix",
+        avatar: "/images/default-avatar.png",
+      },
+      tags: ["leadership", "startup", "scaling"],
+      votes: 18,
+      answers: 9,
+      views: 312,
+      timeAgo: "3 days ago",
+      isAnswered: true,
+      isTrending: false,
+    },
   ]
 
   const popularTags = [
@@ -129,6 +148,7 @@ export default function ForumPage() {
       company: "Google",
       answers: 45,
       reputation: 1250,
+      avatar: "/images/default-avatar.png",
     },
     {
       name: "David Kim",
@@ -136,6 +156,7 @@ export default function ForumPage() {
       company: "Microsoft",
       answers: 38,
       reputation: 980,
+      avatar: "/images/default-avatar.png",
     },
     {
       name: "Maria Rodriguez",
@@ -143,6 +164,7 @@ export default function ForumPage() {
       company: "Meta",
       answers: 32,
       reputation: 875,
+      avatar: "/images/default-avatar.png",
     },
   ]
 
@@ -184,7 +206,7 @@ export default function ForumPage() {
         {/* Header */}
         <div className="bg-gradient-to-r from-green-400 to-blue-500 p-6 rounded-lg text-white">
           <div className="flex items-center gap-4">
-            <ChatBubble className="w-10 h-10" />
+            <MessageCircle className="w-10 h-10" />
             <div>
               <h1 className="text-3xl font-bold">Q&A Forum</h1>
               <p className="text-lg">Engage with the community and get your questions answered</p>
@@ -347,7 +369,7 @@ export default function ForumPage() {
                                 <div className="text-xs text-muted-foreground">
                                   {question.author.role === "student"
                                     ? `Class of ${question.author.year}`
-                                    : `Alumni • ${question.author.company}`}
+                                    : `Alumni • ${(question.author as any).company}`}
                                 </div>
                               </div>
                             </div>
