@@ -39,7 +39,9 @@ import {
   Download,
   Upload,
   RefreshCw,
+  Plus,
 } from "lucide-react";
+import { AddAlumniModal } from "@/components/admin/add-alumni-modal";
 
 export default function AdminDirectoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,6 +49,7 @@ export default function AdminDirectoryPage() {
   const [filterBatch, setFilterBatch] = useState("all");
   const [filterSkills, setFilterSkills] = useState("all");
   const [sortBy, setSortBy] = useState("name");
+  const [showAddAlumniModal, setShowAddAlumniModal] = useState(false);
 
   const alumni = [
     {
@@ -250,9 +253,18 @@ export default function AdminDirectoryPage() {
                 Manage and explore our alumni network
               </p>
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold">{alumni.length}</div>
-              <div className="text-purple-100">Total Alumni</div>
+            <div className="flex items-center gap-4">
+              <Button
+                onClick={() => setShowAddAlumniModal(true)}
+                className="bg-white text-purple-600 hover:bg-purple-50 font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Alumni
+              </Button>
+              <div className="text-right">
+                <div className="text-2xl font-bold">{alumni.length}</div>
+                <div className="text-purple-100">Total Alumni</div>
+              </div>
             </div>
           </div>
         </div>
@@ -510,6 +522,12 @@ export default function AdminDirectoryPage() {
           </Card>
         </div>
       </div>
+
+      {/* Add Alumni Modal */}
+      <AddAlumniModal
+        open={showAddAlumniModal}
+        onOpenChange={setShowAddAlumniModal}
+      />
     </DashboardLayout>
   );
 }
