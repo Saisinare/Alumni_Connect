@@ -69,11 +69,13 @@ const ChatMessage = ({ message }) => {
 
 export default function Chatbot() {
     const [messages, setMessages] = useState([
-        { id: 1, text: "Hello! I'm the AlumniConnect assistant. How can I help you find alumni, events, or answer your questions today?", sender: 'bot' }
+        { id: 1, text: "Hello! I'm your AI Placement Preparation Mentor. I can help you with technical interviews, resume building, HR questions, and career guidance. How can I assist you today?", sender: 'bot' }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [attachment, setAttachment] = useState(null);
     const [isTyping, setIsTyping] = useState(false);
+    const [sessionId, setSessionId] = useState(null);
+    const [suggestions, setSuggestions] = useState([]);
     const chatEndRef = useRef(null);
     const fileInputRef = useRef(null);
 
@@ -84,6 +86,22 @@ export default function Chatbot() {
     useEffect(() => {
         scrollToBottom();
     }, [messages, isTyping]);
+
+    // Load suggestions on component mount
+    useEffect(() => {
+        const loadSuggestions = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/api/student/chatbot/suggestions');
+                if (response.ok) {
+                    const data = await response.json();
+                    setSuggestions(data.suggestions);
+                }
+            } catch (error) {
+                console.error('Error loading suggestions:', error);
+            }
+        };
+        loadSuggestions();
+    }, []);
     
     const handleFileSelect = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -91,31 +109,71 @@ export default function Chatbot() {
         }
     };
 
-    const handleSendMessage = (e) => {
+    const handleSuggestionClick = (suggestion) => {
+        setInputValue(suggestion);
+    };
+
+    const handleSendMessage = async (e) => {
         e.preventDefault();
         if (inputValue.trim() === '' && !attachment) return;
 
+        const userMessage = inputValue.trim();
         const newUserMessage = {
             id: messages.length + 1,
-            text: inputValue,
+            text: userMessage,
             sender: 'user',
             attachment: attachment
         };
+        
         setMessages(prev => [...prev, newUserMessage]);
         setInputValue('');
         setAttachment(null);
         setIsTyping(true);
 
-        // Simulate bot response
-        setTimeout(() => {
+        try {
+            // Call FastAPI backend
+            const response = await fetch('http://localhost:8000/api/student/chatbot/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                    session_id: sessionId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Update session ID if it's new
+            if (!sessionId) {
+                setSessionId(data.session_id);
+            }
+
             const botResponse = {
                 id: messages.length + 2,
-                text: "Thanks for your message! I'm searching for relevant information on AlumniConnect. Please give me a moment.",
+                text: data.response,
                 sender: 'bot',
             };
+            
             setIsTyping(false);
             setMessages(prev => [...prev, botResponse]);
-        }, 1500);
+
+        } catch (error) {
+            console.error('Error calling chatbot API:', error);
+            setIsTyping(false);
+            
+            const errorResponse = {
+                id: messages.length + 2,
+                text: "I'm sorry, I'm having trouble connecting to my AI service right now. Please make sure the backend server is running on port 8000 and try again.",
+                sender: 'bot',
+            };
+            setMessages(prev => [...prev, errorResponse]);
+        }
     };
 
     return (
@@ -127,10 +185,10 @@ export default function Chatbot() {
                         <BotIcon />
                     </div>
                     <div>
-                        <h1 className="text-lg font-bold text-gray-800">AlumniConnect Assistant</h1>
+                        <h1 className="text-lg font-bold text-gray-800">AI Placement Mentor</h1>
                         <div className="flex items-center gap-2">
                             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                            <p className="text-sm text-gray-500">Online</p>
+                            <p className="text-sm text-gray-500">Ready to help with placements</p>
                         </div>
                     </div>
                 </div>
@@ -139,6 +197,25 @@ export default function Chatbot() {
             {/* Chat Messages */}
             <div className="flex-1 p-6 overflow-y-auto">
                 {messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+                
+                {/* Show suggestions after welcome message */}
+                {messages.length === 1 && suggestions.length > 0 && (
+                    <div className="mt-4">
+                        <p className="text-sm text-gray-600 mb-3">💡 Here are some topics I can help you with:</p>
+                        <div className="grid grid-cols-1 gap-2">
+                            {suggestions.slice(0, 5).map((suggestion, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleSuggestionClick(suggestion)}
+                                    className="text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 text-sm text-gray-700 transition-colors duration-200"
+                                >
+                                    {suggestion}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                
                 {isTyping && (
                      <div className="flex items-start gap-3 my-4 justify-start">
                         <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center flex-shrink-0">
@@ -177,7 +254,7 @@ export default function Chatbot() {
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Ask about alumni, mentorship, or events..."
+                        placeholder="Ask about DSA, interviews, resume tips, or career guidance..."
                         className="flex-1 w-full px-4 py-3 bg-gray-100 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-400 transition"
                     />
                     <button

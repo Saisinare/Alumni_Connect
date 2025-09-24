@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.admin.email_routes import router as admin_email_router
+from app.api.student.chatbot_routes import router as student_chatbot_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -13,7 +14,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure as needed for production
+    allow_origins=["http://localhost:3001", "http://127.0.0.1:3001", "*"],  # Configure as needed for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,6 +22,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(admin_email_router)
+app.include_router(student_chatbot_router)
 
 @app.get("/")
 async def root():
@@ -34,6 +36,12 @@ async def root():
             "send_bulk_emails": "/api/admin/send-bulk-emails", 
             "upload_csv_and_send": "/api/admin/upload-csv-and-send",
             "validate_csv": "/api/admin/validate-csv"
+        },
+        "student_endpoints": {
+            "chatbot_chat": "/api/student/chatbot/chat",
+            "chatbot_suggestions": "/api/student/chatbot/suggestions",
+            "chatbot_categories": "/api/student/chatbot/categories",
+            "chatbot_sessions": "/api/student/chatbot/sessions/{session_id}"
         },
         "docs": "/docs"
     }
