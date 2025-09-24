@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // --- Helper Components ---
 
@@ -51,7 +53,11 @@ const ChatMessage = ({ message }) => {
                 </div>
             )}
             <div className={`px-4 py-3 rounded-xl max-w-md ${isUser ? 'bg-teal-500 text-white rounded-br-none' : 'bg-gray-100 text-gray-800 rounded-bl-none'}`}>
-                <p className="text-sm">{message.text}</p>
+                <div className="text-sm leading-relaxed space-y-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_h3]:font-semibold [&_h3]:mt-2 [&_strong]:font-semibold [&_code]:bg-gray-200/70 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {message.text}
+                    </ReactMarkdown>
+                </div>
                 {message.attachment && (
                     <div className="mt-2 text-xs text-gray-500 bg-gray-200 rounded p-2">
                         Attached: {message.attachment.name}
@@ -69,7 +75,20 @@ const ChatMessage = ({ message }) => {
 
 export default function Chatbot() {
     const [messages, setMessages] = useState([
-        { id: 1, text: "Hello! I'm your AI Placement Preparation Mentor. I can help you with technical interviews, resume building, HR questions, and career guidance. How can I assist you today?", sender: 'bot' }
+        {
+            id: 1,
+            sender: 'bot',
+            text: `Hello! I'm your AI Placement Preparation Mentor. I can help with:
+
+### What I can do
+- Technical interview prep: DSA, problem-solving, complexity
+- System design fundamentals and patterns
+- Resume review and bullet point improvements
+- HR/behavioral questions and mock answers
+- Career guidance and project suggestions
+
+Ask me anything to begin, or pick a suggestion below.`,
+        },
     ]);
     const [inputValue, setInputValue] = useState('');
     const [attachment, setAttachment] = useState(null);
